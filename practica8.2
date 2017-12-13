@@ -1,0 +1,257 @@
+SQL> SELECT OWNER, VIEW_NAME, USER FROM ALL_VIEWS
+  2  WHERE VIEW_NAME LIKE 'VISTA2';
+
+OWNER                                                                           
+--------------------------------------------------------------------------------
+VIEW_NAME                                                                       
+--------------------------------------------------------------------------------
+USER                                                                            
+--------------------------------------------------------------------------------
+ALU0100768152                                                                   
+VISTA2                                                                          
+ALU0100768152                                                                   
+                                                                                
+
+SQL> DROP VIEW VISTA1;
+
+View dropped.
+
+SQL> SELECT *
+  2  FROM VISTA2;
+FROM VISTA2
+     *
+ERROR at line 2:
+ORA-04063: view "ALU0100768152.VISTA2" has errors 
+
+
+SQL> ROLLBACK;
+
+Rollback complete.
+
+SQL> SELECT *
+  2  FROM VISTA1;
+FROM VISTA1
+     *
+ERROR at line 2:
+ORA-00942: table or view does not exist 
+
+
+SQL> CREATE INDEX INDICE1
+  2  ON PROFESOR(P);
+
+Index created.
+
+SQL> SELECT DNI
+  2  FROM PROFESOR
+  3  WHERE P='JUAN';
+
+       DNI                                                                      
+----------                                                                      
+      1111                                                                      
+
+SQL> DROP INDEX INDICE1;
+
+Index dropped.
+
+SQL> CREATE INDEX INDICE2
+  2  ON VISTA1(CAR);
+ON VISTA1(CAR)
+   *
+ERROR at line 2:
+ORA-00942: table or view does not exist 
+
+
+SQL> GRANT SELECT
+  2  
+SQL> GRANT SELECT
+  2  ON DEPARTAMENTO
+  3  TO ALUMNO;
+
+Grant succeeded.
+
+SQL> GRANT SELECT
+  2  ON AREA
+  3  TO ALUMNO;
+
+Grant succeeded.
+
+SQL> GRANT SELECT
+  2  ON ASIGNATURA
+  3  
+SQL> GRANT SELECT
+  2  ON ASIGNATURA
+  3  TO ALUMNO;
+
+Grant succeeded.
+
+SQL> GRANT SELECT
+  2  ON TITULACION
+  3  TO ALUMNO;
+
+Grant succeeded.
+
+SQL> GRANT INSERT, UPDATE, DELETE
+  2  ON DEPARTAMENTO
+  3  TO ALUMNO;
+
+Grant succeeded.
+
+SQL> GRANT INSERT, UPDATE, DELETE
+  2  ON AREA
+  3  TO ALUMNO;
+
+Grant succeeded.
+
+SQL> GRANT UPDATE
+  2  ON ASIGNATURA
+  3  TO ALUMNO;
+
+Grant succeeded.
+
+SQL> GRANT UPDATE
+  2  ON TITULACION
+  3  TO ALUMNO;
+
+Grant succeeded.
+
+SQL> COMMIT;
+
+Commit complete.
+
+SQL> CONNECT ALUMNO/xxxxx@exthost.etsii.ull.es:9521/ORCLPDB1
+Connected.
+SQL> SELECT *
+  2  FROM ALU4774.DEPARTAMENTO;
+FROM ALU4774.DEPARTAMENTO
+             *
+ERROR at line 2:
+ORA-00942: table or view does not exist 
+
+
+SQL> SELECT *
+  2  FROM ALU0100768152.DEPARTAMENTO;
+
+        CD D                                                                    
+---------- ------------------------------------------------------------         
+         1 ANALISIS MATEMATICO                                                  
+         2 ASTROFISICA                                                          
+         3 ESTADISTICA, INVESTIGACION OPERATIVA Y COMPUTACION                   
+         4 MATEMATICA FUNDAMENTAL                                               
+
+SQL> SELECT *
+  2  FROM ALU0100768152.PROFESOR;
+FROM ALU0100768152.PROFESOR
+                   *
+ERROR at line 2:
+ORA-00942: table or view does not exist 
+
+
+SQL> INSERT INTO ALU4774.DEPARTAMENTO
+  2  
+SQL> 
+SQL> INSERT INTO ALU0100768152.DEPARTAMENTO
+  2  VALUES(5,'ECONOMIA');
+
+1 row created.
+
+SQL> UPDATE ALU0100768152.DEPARTAMENTO
+  2  SET D='ECONOMIA APLICADA'
+  3  WHERE CD=5;
+
+1 row updated.
+
+SQL> UPDATE ALU0100768152.TITULACION
+  2  SET FAC='ETSII'
+  3  WHERE T='GII';
+
+1 row updated.
+
+SQL> DELETE FROM ALU0100768152.TITULACION
+  2  WHERE T='GII';
+DELETE FROM ALU0100768152.TITULACION
+                          *
+ERROR at line 1:
+ORA-01031: insufficient privileges 
+
+
+SQL> ROLLBACK;
+
+Rollback complete.
+
+SQL> CREATE VIEW VISTA3
+  2  AS SELECT A,CAR
+  3  FROM ALU0100768152.ASIGNATURA;
+
+View created.
+
+SQL> SELECT *
+  2  FROM VISTA3;
+
+A                                                         CAR                   
+-------------------------------------------------- ----------                   
+ESTADISTICA                                                 6                   
+BASES DE DATOS                                              7                   
+INTELIGENCIA ARTIFICIAL                                     4                   
+ALMACENES DE DATOS                                          7                   
+MINERIA DE DATOS                                            7                   
+INFORMATICA BASICA                                          7                   
+ALGEBRA                                                     1                   
+CALCULO                                                     8                   
+OPTIMIZACION                                                6                   
+GESTION DE RIESGOS                                          4                   
+ASTRONOMIA                                                  3                   
+
+A                                                         CAR                   
+-------------------------------------------------- ----------                   
+ENSENANZA DE LA MATEMATICA                                  5                   
+ANALISIS COMPLEJO                                           2                   
+
+13 rows selected.
+
+SQL> DROP VIEW VISTA3;
+
+View dropped.
+
+SQL> DELETE ALI0100768152.ASIGNATURA;
+DELETE ALI0100768152.ASIGNATURA
+                     *
+ERROR at line 1:
+ORA-00942: table or view does not exist 
+
+
+SQL> REVOKE ALL PRIVILEGES
+  2  ON DEPARTAMENTO
+  3  FROM ALUMNO;
+FROM ALUMNO
+     *
+ERROR at line 3:
+ORA-01749: you may not GRANT/REVOKE privileges to/from yourself 
+
+
+SQL> CONNECT ALU0100768152/xxxxx@exthost.etsii.ull.es:9521/ORCLPDB1
+Connected.
+SQL> REVOKE ALL PRIVILEGES
+  2  ON DEPARTAMENTO
+  3  FROM ALUMNO;
+
+Revoke succeeded.
+
+SQL> REVOKE ALL PRIVILEGES
+  2  ON AREA
+  3  FROM ALUMNO;
+
+Revoke succeeded.
+
+SQL> REVOKE ALL PRIVILEGES
+  2  ON ASIGNATURA
+  3  FROM ALUMNO;
+
+Revoke succeeded.
+
+SQL> REVOKE ALL PRIVILEGES
+  2  ON TITULACION
+  3  FROM ALUMNO;
+
+Revoke succeeded.
+
+SQL> SPOOL OFF
